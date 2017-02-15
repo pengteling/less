@@ -1,0 +1,55 @@
+@red:#f00;
+@light-red: @red + #111; // 变量运算 
+@my-selector: banner-text ;
+@images:"../images";
+@prop: color;
+.txt{
+	color: @red; // 值  
+}
+.txt2{
+	color: @light-red; 
+}
+.@{my-selector}{ // 选择器可以是变量 
+	width:200px;
+}
+.bgimg{
+	background: url("@{images}/1.jpg"); // url里面的值包括变量  一定要引号 
+}
+.widget{
+	background-@{prop}:#0f0; // 属性名 可以是变量  
+}
+
+
+@fnord:  "I am fnord.1223";
+@var1:    "fnord";
+#some::before{	
+	content: @@var1;	
+}
+
+// 变量延迟加载 将搜索当前范围内变量的上一次定义
+@var: 0;
+.class {
+  @var: 1;
+  .brass {
+    @var: 2;
+    three: @var;
+    @var: 3;
+  }
+  one: @var;
+  @var : 4;
+}
+
+//延迟加载的使用
+
+@base-color: green;
+@dark-color: darken(@base-color, 10%);
+
+//以上两行放入library.less
+// use of library
+//@import "library.less";
+
+@base-color: red;
+
+.test{
+	color: @dark-color;
+}

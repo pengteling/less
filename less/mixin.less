@@ -1,0 +1,187 @@
+.my-mixin {
+  color: black;
+}
+.my-other-mixin() { //如果有括号 则该mixin内部代码不输出
+  background: white;
+}
+.class {
+  .my-mixin;
+  .my-other-mixin;
+}
+
+
+.my-hover-mixin() {
+  &:hover {  //父选择器
+    border: 1px solid red;
+  }
+}
+button {
+  .my-hover-mixin();
+}
+
+#outer { //命名空间
+  .inner {
+    color: red;
+  }
+}
+
+.c {
+  #outer > .inner;
+}
+
+
+.border-radius(@radius: 5px) { //带参mixin 默认value
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+
+.button {
+  .border-radius(6px);
+}
+
+/* 多个参数 */
+.mixin(@color: black; @margin: 10px; @padding: 20px) {
+  color: @color;
+  margin: @margin;
+  padding: @padding;
+}
+.class1 {
+  .mixin(@margin: 20px; @color: #33acfe); //带参数名的赋值
+}
+.class2 {
+  .mixin(#efca44; @padding: 40px); //带参数名称，参数可跳过顺序
+}
+
+/* @arguments */
+.box-shadow(@x: 0; @y: 0; @blur: 1px; @color: #000) {
+  -webkit-box-shadow: @arguments;  //所有参数
+     -moz-box-shadow: @arguments;
+          box-shadow: @arguments;
+}
+.big-block {
+  .box-shadow(2px; 5px);
+}
+
+
+.mixin1(dark; @color) {
+  color: darken(@color, 10%);
+}
+.mixin1(light; @color) {
+  color: lighten(@color, 10%);
+}
+.mixin1(@_; @color) { //@_ 不管何值都会匹配
+  display: block;
+}
+
+@switch: light;
+
+.class {
+  .mixin1(@switch; #888);
+}
+
+/* 类似函数 */
+.average(@x, @y) {
+  @average: ((@x + @y) / 2);
+}
+
+div {
+  .average(16px, 50px); // "call" the mixin
+  padding: @average;    // use its "return" value
+}
+
+//mixin Guards 
+.mixin2 (@a) when (lightness(@a) >= 50%) {
+  background-color: black;
+}
+.mixin2 (@a) when (lightness(@a) < 50%) {
+  background-color: white;
+}
+.mixin2 (@a) {
+  color: @a;
+}
+
+.class1 { .mixin2(#ddd) }
+.class2 { .mixin2(#555) }
+
+/* 逻辑运算  与或非 */
+// .mixin (@a) when (isnumber(@a)) and (@a > 0) { ... }
+//.mixin (@a) when (isnumber(@a) , (@a > 0) { ... }
+// .mixin (@a) when not (@a > 0) { ... }
+
+/* 检查函数 */
+
+//.mixin (@a; @b: 0) when (isnumber(@b)) { ... }
+// Here are the basic type checking functions:
+
+// iscolor
+// isnumber
+// isstring
+// iskeyword
+// isurl
+
+
+
+// ispixel
+// ispercentage
+// isem
+// isunit
+
+/* 表示上面的条件都不匹配 则匹配default()  */
+// .mixin (@a) when (@a > 0) { ...  }
+// .mixin (@a) when (default()) { ... } // matches only if first mixin does not, i.e. when @a <= 0
+
+
+/* 循环 */
+
+.loop(@counter) when (@counter > 0) {
+  .loop((@counter - 1));    // next iteration
+  width: (10px * @counter); // code for each iteration
+}
+
+div {
+  .loop(5); // launch the loop
+}
+
+/* 递归循环 */
+.generate-columns(4);
+
+.generate-columns(@n, @i: 1) when (@i =< @n) {
+  .column-@{i} {
+    width: (@i * 100% / @n);
+  }
+  .generate-columns(@n, (@i + 1));
+}
+
+
+/* 合并  transform box-shadow */
+// .mixin() {
+//   transform+_: scale(2);
+// }
+// .myclass {
+//   .mixin();
+//   transform+_: rotate(15deg);
+// }
+
+
+/* 父选择器 */
+
+.grand {
+  .parent {
+    & > & {
+      color: red;
+    }
+
+    & & {
+      color: green;
+    }
+
+    && {
+      color: blue;
+    }
+
+    &, &ish {
+      color: cyan;
+    }
+  }
+}

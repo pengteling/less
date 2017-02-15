@@ -39,17 +39,19 @@ gulp.task('browser-sync', function() {
 
 var less = require('gulp-less');
 var sourcemaps = require('gulp-sourcemaps');
+const plumber = require('gulp-plumber'); //防止gulp退出进程
 gulp.task('less', function() { 
     return gulp.src('./less/**/*.less')
+      .pipe(plumber())
       .pipe(sourcemaps.init())
       .pipe(less())
       .pipe(sourcemaps.write())
       .pipe(gulp.dest('./css'))
-      .pipe(browserSync.reload({
-                 stream: true
-             }));
+      // .pipe(browserSync.reload({
+      //            stream: true
+      //        }));
   });
 
-gulp.watch("./less/**/*.less", ['less']);
+gulp.watch("less/**/*.less", ['less']);  // ./less路径 不监控 新增加的，如果去掉 ./ 则可以监控 less中新增加的less文件改动
 
-gulp.task('default',['browser-sync']);
+gulp.task('default',['less','browser-sync']);

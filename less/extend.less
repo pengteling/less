@@ -1,0 +1,97 @@
+.inline {
+  color: red;
+}
+nav ul {
+  &:extend(.inline);
+  background: blue;
+  color:red;
+}
+
+
+.b{
+	color:red;
+}
+
+// .a:extend(.b) {
+// 	color: blue
+// }
+// .a{
+// 	&:extend(.b);  //等价写法 
+// 	color:blue
+// }
+
+
+//交换顺序
+
+
+// .a:extend(.b) {
+// 	color: blue
+// }
+// .b{
+// 	color:red;
+// }
+
+
+.b.g{
+	background: #000;
+}
+.c:extend(.b all){  //all关键字 可以 .b.g
+	color:blue;
+}
+
+
+/*  */
+// .e:extend(.f) {}
+// .e:extend(.g) {}
+
+// // the above an the below do the same thing
+// .e:extend(.f, .g) {}
+
+//经典用法
+
+.animal {
+  background-color: black;
+  color: white;
+}
+// .bear {
+//   background-color: brown;
+// }
+
+.bear{
+	&:extend(.animal);  //html中只需写 class=bear 而不用写 animal bear 两个样式
+	background-color: brown;
+}
+
+//减少CSS代码量 相对比 mixin
+
+// .my-inline-block() {
+//     display: inline-block;
+//   font-size: 0;
+// }
+// .thing1 {
+//   .my-inline-block; //mixin 混合
+// }
+// .thing2 {
+//   .my-inline-block;
+// }
+
+
+.my-inline-block {
+  display: inline-block;
+  font-size: 0;
+}
+.thing1 {
+  &:extend(.my-inline-block);
+}
+.thing2 {
+  &:extend(.my-inline-block);
+}
+
+// 用法三
+
+// li.list > a {
+//   // list styles
+// }
+// button.list-style {
+//   &:extend(li.list > a); // use the same list styles
+// }
